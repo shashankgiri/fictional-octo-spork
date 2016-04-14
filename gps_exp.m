@@ -1,0 +1,12 @@
+pose=load_pose_applanix('Pose-Applanix.log');
+scan1=200;
+scan2=205;
+scanName1 = sprintf('%s/SCANS/Scan%04d.mat','F:\',scan1);
+M1=load(scanName1);
+scanName2 = sprintf('%s/SCANS/Scan%04d.mat','F:\',scan2);
+M2=load(scanName2);
+l1=find(M1.SCAN.timestamp_laser>pose.utime, 1, 'last' );
+X_wv1=[pose.pos(l1,:) ,quat2eul(pose.orientation(l1,:))];
+l2=find(M2.SCAN.timestamp_laser>pose.utime, 1, 'last' );
+X_wv2=[pose.pos(l2,:) ,quat2eul(pose.orientation(l2,:))];
+pose3=ssc_tail2tail(X_wv2',X_wv1');
